@@ -1,5 +1,5 @@
 packagepath() = joinpath(@__DIR__, "models")
-urdfpath() = joinpath(packagepath(), "digit_w_grippers.urdf")
+urdfpath() = joinpath(packagepath(), "digit_model.urdf")
 
 function mechanism(;floating=true, remove_fixed_joints=true, add_flat_ground=false)
     mechanism = RigidBodyDynamics.parse_urdf(urdfpath(); scalar_type=Float64, floating=floating, remove_fixed_tree_joints=remove_fixed_joints)
