@@ -3,6 +3,7 @@ using DigitVisualizer
 using DigitVisualizer.MeshCat
 using DigitVisualizer.RigidBodyDynamics
 
+# set up visualizer
 vis = Visualizer()
 initialize_arena!(vis)
 digit = DigitViz(vis)
