@@ -1,0 +1,13 @@
+name = "DigitVisualizer"
+uuid = "0b9a9782-e80c-4758-a06f-d2d15de5218a"
+authors = ["Alphonsus Adu-Bredu"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
