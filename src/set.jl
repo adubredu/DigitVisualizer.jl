@@ -1,14 +1,13 @@
 
-function update_state!(q::Vector{Float64},  q̇::Vector{Float64}, sim::DigitViz)
+function update_state!(q::Vector{Float64},  q̇::Vector{Float64}, sim::DigitViz) 
     state = sim.state
     mechanism = state.mechanism
-    floating_base = first(out_joints(root_body(mechanism), mechanism)) 
-    base_pose = q[1:7] 
+    floating_base = first(out_joints(root_body(mechanism), mechanism))  
+    base_pose = q[1:7]
     set_configuration!(state, floating_base, base_pose)
-    for (i, joint) in enumerate(digit.joint_names)
-        set_configuration!(state, findjoint(mechanism, joint), q[i+7])
-        # set_velocity!(state, findjoint(mechanism, joint), q̇[i+6])
-    end
+    for (i, joint) in enumerate(joints(sim.state.mechanism)[2:end])
+        set_configuration!(state, joint, q[i+7]) 
+    end 
     qstate = configuration(state)
     q̇state = velocity(state)
     return qstate, q̇state
@@ -53,14 +52,24 @@ function set_nominal_configuration(sim::DigitViz)
     set_configuration!(sim.mvis, configuration(state))
 end
 
-function set_joint_positions!(θ::Vector{Float64}, sim::DigitViz)
+function set_joint_positions!(θ::AbstractArray{Float64}, sim::DigitViz)
     state = sim.state
     mechanism = state.mechanism
     floating_base = first(out_joints(root_body(mechanism), mechanism)) 
-    base_pose = [ypr_to_quat(θ[4:6])..., θ[1:3]...]
+    # base_pose = [ypr_to_quat(θ[4:6])..., θ[1:3]...]
+    base_pose = θ[1:7]
     set_configuration!(state, floating_base, base_pose)
-    for (i, joint) in enumerate(sim.joint_names)
-        set_configuration!(state, findjoint(mechanism, joint), θ[i+6]) 
+    for (i, joint) in enumerate(joints(sim.state.mechanism)[2:end])
+        set_configuration!(state, joint, θ[i+7]) 
     end 
     set_configuration!(sim.mvis, configuration(state))
+end 
+
+function animate_trajectory(θs::AbstractArray, Ts::Vector{Float64}, sim::DigitViz)
+    qs = SegmentedVector{JointID, Float64, Base.OneTo{JointID}, Vector{Float64}}[]
+    for θ in θs 
+        qstate, _ = update_state!(θ, zeros(30), sim)
+        push!(qs, copy(qstate))
+    end
+    return Ts, qs
 end

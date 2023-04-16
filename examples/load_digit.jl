@@ -10,8 +10,8 @@ digit = DigitViz(vis)
 load_digit_vis(digit)
 
 # get generalized coordinates of Digit
-# floating base (x, y, z, y, p, r) + 24 joint positions
-q = get_generalized_coordinates(digit)
+# floating base (qw, qx, qy, qz, x, y, z) + 24 joint positions
+q = get_generalized_coordinates(digit) 
 @show q 
 
 # edit shoulder joint position
