@@ -13,6 +13,21 @@ function update_state!(q::Vector{Float64},  q̇::Vector{Float64}, sim::DigitViz)
     return qstate, q̇state
 end
 
+function update_state_frost!(q, sim)
+    state = sim.state
+    mechanism = state.mechanism
+    x,y,z,y,p,r = q[1:6]
+    ow, ox, oy, oz = ypr_to_quat([y,p,r])
+    floating = [ow, ox, oy, oz, x, y, z]
+    for (i, joint_name) in sim.joint_names 
+        joint = findjoint(mechanism, joint_name)
+        set_configuration!(state, joint, q[i+6])
+    end
+    qstate = configuration(state)
+    qstate[1:7] = floating 
+    return qstate
+end
+
 function set_nominal_configuration(sim::DigitViz)
     default_configuration = Dict(
         "left-hip-roll" => 0.302,
@@ -69,6 +84,15 @@ function animate_trajectory(θs::AbstractArray, Ts::Vector{Float64}, sim::DigitV
     qs = SegmentedVector{JointID, Float64, Base.OneTo{JointID}, Vector{Float64}}[]
     for θ in θs 
         qstate, _ = update_state!(θ, zeros(30), sim)
+        push!(qs, copy(qstate))
+    end
+    return Ts, qs
+end
+
+function animate_trajectory_frost(θs::AbstractArray, Ts::Vector{Float64}, sim::DigitViz)
+    qs = SegmentedVector{JointID, Float64, Base.OneTo{JointID}, Vector{Float64}}[]
+    for θ in θs 
+        qstate = update_state_frost(θ, zeros(30), sim)
         push!(qs, copy(qstate))
     end
     return Ts, qs

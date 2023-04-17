@@ -17,3 +17,17 @@ function get_generalized_coordinates(sim::DigitViz)
     q = copy(qstate.parent)
     return q
 end
+
+function get_frost_generalized_coordinates(sim::DigitVis) 
+    state = sim.state 
+    mechanism = state.mechanism
+    floating_base_joint = first(out_joints(root_body(mechanism), mechanism)) 
+    ow, ox, oy, oz, x, y, z = configuration(state, floating_base_joint)
+    y, p, r = quat_to_ypr([ow, ox, oy, oz])
+    q = [x, y, z, y, p, r]
+    for joint_name in sim.joint_names 
+        joint = findjoint(mechanism, joint_name)
+        push!(q, configuration(state, joint))
+    end
+    return q 
+end
