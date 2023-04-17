@@ -27,7 +27,7 @@ function get_frost_generalized_coordinates(sim::DigitViz)
     q = [x, y, z, y, p, r]
     for joint_name in sim.joint_names 
         joint = findjoint(mechanism, joint_name)
-        push!(q, configuration(state, joint))
+        push!(q, configuration(state, joint)[1])
     end
     return q 
 end
