@@ -18,7 +18,7 @@ function get_generalized_coordinates(sim::DigitViz)
     return q
 end
 
-function get_frost_generalized_coordinates(sim::DigitVis) 
+function get_frost_generalized_coordinates(sim::DigitViz) 
     state = sim.state 
     mechanism = state.mechanism
     floating_base_joint = first(out_joints(root_body(mechanism), mechanism)) 
