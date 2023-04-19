@@ -19,7 +19,7 @@ function update_state_frost!(q, sim)
     x,y,z,y,p,r = q[1:6]
     ow, ox, oy, oz = ypr_to_quat([y,p,r])
     floating = [ow, ox, oy, oz, x, y, z]
-    for (i, joint_name) in sim.joint_names 
+    for (i, joint_name) in enumerate(sim.joint_names) 
         joint = findjoint(mechanism, joint_name)
         set_configuration!(state, joint, q[i+6])
     end
@@ -77,6 +77,21 @@ function set_joint_positions!(θ::AbstractArray{Float64}, sim::DigitViz)
     for (i, joint) in enumerate(joints(sim.state.mechanism)[2:end])
         set_configuration!(state, joint, θ[i+7]) 
     end 
+    set_configuration!(sim.mvis, configuration(state))
+end 
+
+function set_frost_joint_positions!(q::AbstractArray{Float64}, sim::DigitViz)
+    state = sim.state
+    mechanism = state.mechanism
+    x,y,z,y,p,r = q[1:6]
+    ow, ox, oy, oz = ypr_to_quat([y,p,r])
+    floating_base = first(out_joints(root_body(mechanism), mechanism))      
+    base_pose = [ow, ox, oy, oz, x, y, z] 
+    set_configuration!(state, floating_base, base_pose)
+    for (i, joint_name) in enumerate(sim.joint_names) 
+        joint = findjoint(mechanism, joint_name)
+        set_configuration!(state, joint, q[i+6])
+    end
     set_configuration!(sim.mvis, configuration(state))
 end 
 

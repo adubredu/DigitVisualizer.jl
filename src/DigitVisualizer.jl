@@ -23,6 +23,7 @@ export DigitViz
 export load_digit_vis,
         initialize_arena!,
         set_joint_positions!,
+        set_frost_joint_positions!,
         get_generalized_coordinates,
         get_frost_generalized_coordinates,
         animate_trajectory

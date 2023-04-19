@@ -9,7 +9,7 @@ initialize_arena!(vis)
 digit = DigitViz(vis)
 load_digit_vis(digit)
 
-# edit shoulder joint position
+# edit leg joint position
 confs = collect(1.5:-0.01:-1.5) 
 Ts = collect(0.0:0.01:3)
 qs = []
