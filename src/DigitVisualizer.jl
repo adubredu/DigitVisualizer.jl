@@ -26,7 +26,8 @@ export load_digit_vis,
         set_frost_joint_positions!,
         get_generalized_coordinates,
         get_frost_generalized_coordinates,
-        animate_trajectory
+        animate_trajectory,
+        animate_trajectory_frost
 
 
 end
