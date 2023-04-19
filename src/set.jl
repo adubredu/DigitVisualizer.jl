@@ -107,7 +107,7 @@ end
 function animate_trajectory_frost(θs::AbstractArray, Ts::Vector{Float64}, sim::DigitViz)
     qs = SegmentedVector{JointID, Float64, Base.OneTo{JointID}, Vector{Float64}}[]
     for θ in θs 
-        qstate = update_state_frost!(θ, zeros(30), sim)
+        qstate = update_state_frost!(θ, sim)
         push!(qs, copy(qstate))
     end
     return Ts, qs
